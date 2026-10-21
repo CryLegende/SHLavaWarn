@@ -1,0 +1,19 @@
+# Configuration pour SHLavaWarn
+
+warning:
+  # Message à envoyer aux joueurs proches.
+  # Placeholders disponibles: {x}, {y}, {z} pour les coordonnées du bloc d'obsidienne.
+  # Utilisez '&' pour les codes couleurs (ex: &6 pour or, &b pour aqua).
+  message: "&7&l« &6&lSH &8&l» &fDe la lave a été transformé en obsidienne\n&7Rappel: Faire un clic droit sur l'obsidienne avec un seau vide permet de la retransformer en lave ! (enlevez l'eau avant)"
+
+  sound:
+    # Nom du son à jouer. Liste des sons disponibles ici: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+    # Exemple: ENTITY_EXPERIENCE_ORB_PICKUP, BLOCK_NOTE_BLOCK_PLING, ENTITY_PLAYER_LEVELUP
+    name: "BLOCK_END_PORTAL_SPAWN"
+    # Volume du son (0.0 à 2.0, 1.0 est normal)
+    volume: 1.0
+    # Hauteur (pitch) du son (0.5 à 2.0, 1.0 est normal)
+    pitch: 2.0
+
+  # Rayon en blocs autour de l'obsidienne pour notifier les joueurs.
+  radius: 15.0

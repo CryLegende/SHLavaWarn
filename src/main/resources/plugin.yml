@@ -1,0 +1,5 @@
+name: SHLavaWarn
+version: '${project.version}'
+main: org.Cry_Legende.sHLavaWarn.SHLavaWarn
+api-version: '1.20'
+author: Cry_Legende
