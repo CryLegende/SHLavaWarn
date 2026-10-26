@@ -3,6 +3,8 @@ package org.Cry_Legende.sHLavaWarn;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Locale;
 
 public class SHLavaWarn extends JavaPlugin implements Listener {
 
@@ -54,13 +58,12 @@ public class SHLavaWarn extends JavaPlugin implements Listener {
         soundVolume = (float) config.getDouble("warning.sound.volume", 1.0);
         soundPitch = (float) config.getDouble("warning.sound.pitch", 1.0);
 
-        // Essayer de convertir le nom du son en objet Sound
-        try {
-            soundToPlay = Sound.valueOf(soundName);
-        } catch (IllegalArgumentException e) {
+        // Essayer de convertir le nom ou la clé du son en objet Sound
+        soundToPlay = sound(soundName);
+        if (soundToPlay == null) {
             getLogger().warning("Nom de son invalide dans config.yml: '" + soundName + "'. Utilisation de ENTITY_EXPERIENCE_ORB_PICKUP par défaut.");
             soundToPlay = Sound.ENTITY_EXPERIENCE_ORB_PICKUP; // Son par défaut robuste
-            soundName = soundToPlay.name(); // Mettre à jour soundName pour le log
+            soundName = "ENTITY_EXPERIENCE_ORB_PICKUP"; // Mettre à jour soundName pour le log
         }
 
         // Lire le rayon
@@ -99,6 +102,21 @@ public class SHLavaWarn extends JavaPlugin implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    /** Son lu en config : ancien nom (ENTITY_PLAYER_LEVELUP) ou clé (minecraft:entity.player.levelup). */
+    static Sound sound(String raw) {
+        if (raw == null || raw.isBlank()) return null;
+        String s = raw.trim();
+        if (s.indexOf(':') >= 0 || s.indexOf('.') >= 0) {
+            NamespacedKey key = NamespacedKey.fromString(s.toLowerCase(Locale.ROOT));
+            return key == null ? null : Registry.SOUND_EVENT.get(key);
+        }
+        try {
+            return (Sound) Sound.class.getField(s.toUpperCase(Locale.ROOT)).get(null);
+        } catch (ReflectiveOperationException | ClassCastException e) {
+            return null;
         }
     }
 
